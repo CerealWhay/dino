@@ -18,8 +18,6 @@ class Circle {
     color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
     constructor(ctx) {
         this.ctx = ctx;
-
-        this.drawCircle();
     }
 
     drawCircle = (color = this.color) => {
@@ -38,17 +36,16 @@ class Circle {
     }
 
     moveCircle = () => {
-        // this.ctx.clearRect(
-        //     this.positionX - this.radius - 1,
-        //     this.positionY - this.radius - 1,
-        //     (this.radius * 2) + 2,
-        // (this.radius * 2) + 2,
-        // )
+        /* Зарисовывваем круг на прошлом его месте */
+        ctx.lineWidth = 3;
+        this.drawCircle('#fff')
+        ctx.lineWidth = 1;
 
         /* ТУТ ВСЯ МАГИЯ */
         // this.drawCircle('#fff')
-        this.drawCircle('#fff0')
+        // this.drawCircle('#fff0')
 
+        /* рисуем новый круг */
         let newX = this.positionX + (1 *  (Math.random() < 0.5 ? -1 : 1));
         if (newX <= canvas.width && newX >= 0) {
             this.positionX = newX;
@@ -58,15 +55,18 @@ class Circle {
         if (newY <= canvas.height && newY >= 0) {
             this.positionY = newY;
         }
-
         this.drawCircle()
-        window.requestAnimationFrame(this.moveCircle);
     }
 }
 
-for (let i = 0; i < 1000; i++) {
-    let circle = new Circle(ctx);
+const animateCircle = (circle) => {
     circle.moveCircle()
+    window.requestAnimationFrame(() => animateCircle(circle))
+}
+
+for (let i = 0; i < 100; i++) {
+    let circle = new Circle(ctx);
+    animateCircle(circle)
 }
 
 

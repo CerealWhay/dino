@@ -119,7 +119,7 @@ Vue.createApp({
                 <div>
                     circles amount : {{ circlesAmount }}
                 </div>
-                <input v-model="circlesAmount" type="range" :min="1" max="10" step="1">
+                <input v-model="circlesAmount" type="range" :min="1" max="1000" step="1">
             </label>
         </div>
 

@@ -1,73 +1,133 @@
 
 /* index script */
 
-const MAX_WIDTH = 1200;
-const MAX_HEIGHT = 600;
+/*
+* max-radios
+* circle numbers
+* type of coloring
+* */
 
-const canvas = document.querySelector('canvas')
-let ctx = canvas.getContext('2d')
-canvas.width = MAX_WIDTH;
-canvas.height = MAX_HEIGHT;
+import {Circle} from "./Circle.js";
+
+Vue.createApp({
+    data() {
+        return {
+            canvasWidth: 1200,
+            canvasHeight: 600,
 
 
-class Circle {
-    ctx;
-    positionX = Math.random() * 1200;
-    positionY = Math.random() * 600;
-    radius = 10;
-    color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
-    constructor(ctx) {
-        this.ctx = ctx;
-    }
+            coloringTypes: {
+                noPaint: 'noPaint',
+                fullPaint: 'fullPaint',
+                borderPaint: 'borderPaint',
+            },
 
-    drawCircle = (color = this.color) => {
-        this.ctx.strokeStyle = color
-        this.ctx.beginPath();
-        this.ctx.arc(
-            this.positionX,
-            this.positionY,
-            this.radius,
-            0,
-            Math.PI * 2,
-            false
-        );
-        this.ctx.closePath();
-        this.ctx.stroke();
-    }
+            minRadius: 10,
+            maxRadius: 100,
+            circlesAmount: 1,
+            coloringType: null,
 
-    moveCircle = () => {
-        /* Зарисовывваем круг на прошлом его месте */
-        ctx.lineWidth = 3;
-        this.drawCircle('#fff')
-        ctx.lineWidth = 1;
-
-        /* ТУТ ВСЯ МАГИЯ */
-        // this.drawCircle('#fff')
-        // this.drawCircle('#fff0')
-
-        /* рисуем новый круг */
-        let newX = this.positionX + (1 *  (Math.random() < 0.5 ? -1 : 1));
-        if (newX <= canvas.width && newX >= 0) {
-            this.positionX = newX;
+            canvas: null,
+            ctx: null,
+            circles: [],
         }
+    },
+    mounted() {
+        this.initCanvas();
 
-        let newY = this.positionY + (1 *  (Math.random() < 0.5 ? -1 : 1));
-        if (newY <= canvas.height && newY >= 0) {
-            this.positionY = newY;
+        for (let i = 0; i < this.circlesAmount; i++) {
+            const circle = new Circle(
+                this.ctx,
+                this.canvasWidth,
+                this.canvasHeight,
+                this.minRadius,
+                this.maxRadius,
+            );
+            this.animateCircle(circle)
+            this.circles.push(circle)
         }
-        this.drawCircle()
-    }
-}
+    },
+    watch: {
+        minRadius(newMinRadius) {
+            const intValue = parseInt(newMinRadius);
+            this.circles.forEach((circle) => circle.changeRadius(intValue, this.maxRadius))
+        },
+        maxRadius(newMaxRadius) {
+            const intValue = parseInt(newMaxRadius);
+            this.circles.forEach((circle) => circle.changeRadius(this.minRadius, intValue))
+        },
+        circlesAmount(newCirclesAmount, oldCirclesAmount) {
+            if (parseInt(newCirclesAmount) >= parseInt(oldCirclesAmount)) {
+                const value = parseInt(newCirclesAmount) - parseInt(oldCirclesAmount);
+                for (let i = 0; i < value; i++) {
+                    const circle = new Circle(
+                        this.ctx,
+                        this.canvasWidth,
+                        this.canvasHeight,
+                        this.minRadius,
+                        this.maxRadius,
+                    );
+                    this.animateCircle(circle)
+                    this.circles.push(circle)
+                }
+            } else {
+                const value = parseInt(oldCirclesAmount) - parseInt(newCirclesAmount);
+                for (let i = 0; i < value; i++) {
+                    let circle = this.circles.pop();
+                    circle.deleteCircle()
+                }
+            }
+        }
+    },
+    methods: {
+        initCanvas() {
+            this.canvas = this.$refs.canvas;
+            this.ctx = this.canvas.getContext('2d')
 
-const animateCircle = (circle) => {
-    circle.moveCircle()
-    window.requestAnimationFrame(() => animateCircle(circle))
-}
+            this.canvas.width = this.canvasWidth;
+            this.canvas.height = this.canvasHeight;
+        },
+        animateCircle(circle) {
+            circle.moveCircle()
+            window.requestAnimationFrame(() => this.animateCircle(circle))
+        }
+    },
+    template: `
+    
+    <div class="container">
+        <canvas ref="canvas"></canvas>
+        
+        <div>
+            <label>
+                <div>
+                    min radius : {{ minRadius }}
+                </div>
+                <input v-model="minRadius" type="range" min="0" :max="maxRadius" step="10">
+            </label>
+        </div>
+        <div>
+            <label>
+                <div>
+                    max radius : {{ maxRadius }}
+                </div>
+                <input v-model="maxRadius" type="range" :min="minRadius" max="1000" step="10">
+            </label>
+        </div>
+        
+                <div>
+            <label>
+                <div>
+                    circles amount : {{ circlesAmount }}
+                </div>
+                <input v-model="circlesAmount" type="range" :min="1" max="10" step="1">
+            </label>
+        </div>
 
-for (let i = 0; i < 100; i++) {
-    let circle = new Circle(ctx);
-    animateCircle(circle)
-}
+        
+    </div>
+    
+    `
+}).mount('#app')
 
 
 

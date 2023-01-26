@@ -90,6 +90,11 @@ Vue.createApp({
         animateCircle(circle) {
             circle.moveCircle()
             window.requestAnimationFrame(() => this.animateCircle(circle))
+        },
+        animateCircle2() {
+            this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
+            this.circles.forEach((circle) => circle.moveCircle())
+            window.requestAnimationFrame(this.animateCircle2)
         }
     },
     template: `

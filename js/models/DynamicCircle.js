@@ -1,20 +1,29 @@
-export class Circle {
+export class DynamicCricle {
+
+    radius = 15;
+
     constructor(
         ctx,
         positionX,
         positionY,
-        radius,
-        color
     ) {
         this.ctx = ctx;
         this.positionX = positionX;
         this.positionY = positionY;
-        this.radius = radius;
-        this.color = color;
     }
 
-    draw = (color = this.color) => {
-        this.ctx.fillStyle = color
+    getPosition() {
+        return {
+            x: this.positionX,
+            y: this.positionY,
+        }
+    }
+
+    getRadius() {
+        return this.radius;
+    }
+
+    draw() {
         this.ctx.beginPath();
         this.ctx.arc(
             this.positionX,
@@ -26,11 +35,5 @@ export class Circle {
         );
         this.ctx.closePath();
         this.ctx.fill();
-    }
-
-    moveCircleMouse(x, y) {
-        this.positionX = x;
-        this.positionY = y;
-        this.draw()
     }
 }

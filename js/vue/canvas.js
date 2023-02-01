@@ -96,7 +96,7 @@ export const app = Vue.createApp({
             this.player.draw()
 
             // draw aim
-            this.aim.move(this.playerPosition, this.aim.getVelocity());
+            this.aim.move(this.playerPosition, this.aim.getMousePos());
             this.aim.draw();
 
             window.requestAnimationFrame(this.animateCanvas)
@@ -180,10 +180,16 @@ export const app = Vue.createApp({
                 }
             })
         },
+        mousePos(e) {
+            return {
+                x: e.clientX - this.canvasRect.left,
+                y: e.clientY - this.canvasRect.top
+            }
+        },
         shoot(e) {
             const angle = Math.atan2(
-                e.clientY - this.canvasRect.top - this.playerPosition.y,
-                e.clientX - this.canvasRect.left - this.playerPosition.x,
+                this.mousePos(e).y - this.playerPosition.y,
+                this.mousePos(e).x - this.playerPosition.x,
             )
             const velocity = {
                 x: Math.cos(angle),
@@ -197,24 +203,7 @@ export const app = Vue.createApp({
             ))
         },
         changeAim(e) {
-
-            const mousePos = {
-                x: e.clientX - this.canvasRect.left,
-                y: e.clientY - this.canvasRect.top
-            }
-
-            const angle = Math.atan2(
-                mousePos.y - this.playerPosition.y,
-                mousePos.x - this.playerPosition.x,
-            )
-
-            // удлинение прицела
-            const extension = 1500;
-            const x = (Math.cos(angle) * extension) + mousePos.x;
-            const y = (Math.sin(angle) * extension) + mousePos.y;
-
-            this.aim.move(this.playerPosition, {x, y});
-            this.aim.draw();
+            this.aim.move(this.playerPosition, this.mousePos(e));
         }
     },
     // language=Vue

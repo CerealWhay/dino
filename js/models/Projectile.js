@@ -1,6 +1,6 @@
-import {DynamicCricle} from "./DynamicCircle.js";
+import {DynamicCircle} from "./DynamicCircle.js";
 
-export class Projectile extends DynamicCricle {
+export class Projectile extends DynamicCircle {
 
     radius = 2;
 
@@ -17,7 +17,7 @@ export class Projectile extends DynamicCricle {
     }
 
     move() {
-        this.positionX += this.velocity.x * 10;
-        this.positionY += this.velocity.y * 10;
+        this.position.x += this.velocity.x * 10;
+        this.position.y += this.velocity.y * 10;
     }
 }

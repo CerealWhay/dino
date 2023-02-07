@@ -1,21 +1,24 @@
-export class DynamicCricle {
+export class DynamicCircle {
 
     radius = 15;
+    position = {
+        x: 0,
+        y: 0,
+    }
 
     constructor(
         ctx,
-        positionX,
-        positionY,
+        position,
     ) {
         this.ctx = ctx;
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.position.x = position.x;
+        this.position.y = position.y;
     }
 
     getPosition() {
         return {
-            x: this.positionX,
-            y: this.positionY,
+            x: this.position.x,
+            y: this.position.y,
         }
     }
 
@@ -26,8 +29,8 @@ export class DynamicCricle {
     draw() {
         this.ctx.beginPath();
         this.ctx.arc(
-            this.positionX,
-            this.positionY,
+            this.position.x,
+            this.position.y,
             this.radius,
             0,
             Math.PI * 2,

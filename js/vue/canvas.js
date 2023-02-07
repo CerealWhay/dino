@@ -1,16 +1,20 @@
 import {Player} from "../models/Player.js";
+import {Enemy} from "../models/Enemy.js";
 import {Projectile} from "../models/Projectile.js";
 import {KeyboardEvents} from "./keyboardEvents.js";
 import {AimLine} from "../models/Aim.js";
 
 /* @todo:
-     сделать врагов (просто будут появляться с краев и идти на игрока)
+     сделать коллизию вражины и игрока
+     сделать рефактор, а то пиздец ваще сложна файл огромный
      сделать score
      сделать усложнение (увеличение потока врагов) с увеличением score
      сделать restart кнопку
 
      вынести обработку нажатий на клаву куда-то,
+     сделать модельки покрасивше
      сделать стрельбу зажимом
+     сделать полоску хп, чтобы не от одгного вражины дохнуть
      сделать несколько видов оружия
      сделалть врагов-боссов (кторые не умирают от одного выстрела)
      сделать ходьбу у игрока с инерцией
@@ -35,9 +39,10 @@ export const app = Vue.createApp({
             isPlayerRight: false,
 
             projectiles: [],
-            isShooting: false,
 
-            aim: null
+            aim: null,
+
+            enemies: [],
         }
     },
     computed: {
@@ -50,6 +55,7 @@ export const app = Vue.createApp({
     },
     mounted() {
         this.initCanvas();
+        setInterval(this.createEnemy, 1000)
     },
     methods: {
         initCanvas() {
@@ -65,8 +71,10 @@ export const app = Vue.createApp({
         createPlayer() {
             this.player = new Player(
                 this.ctx,
-                this.canvasWidth / 2,
-                this.canvasHeight / 2,
+                {
+                    x: this.canvasWidth / 2,
+                    y: this.canvasHeight / 2,
+                }
             );
         },
         createAim() {
@@ -78,6 +86,33 @@ export const app = Vue.createApp({
                     y: this.canvasHeight / 2,
                 }
             );
+        },
+        createEnemy() {
+            let position = {
+                x: 0,
+                y: 0,
+            }
+            if (Math.random() < 0.5) {
+                position.x =  Math.random() < 0.5 ? 0 : this.canvasWidth;
+                position.y =  Math.random() * this.canvasHeight;
+            } else {
+                position.x =  Math.random() * this.canvasWidth;
+                position.y =  Math.random() < 0.5 ? 0 : this.canvasHeight;
+            }
+
+            const angle = Math.atan2(
+                this.playerPosition.y - position.y,
+                this.playerPosition.x - position.x,
+            )
+            const velocity = {
+                x: Math.cos(angle),
+                y: Math.sin(angle)
+            }
+            this.enemies.push(new Enemy(
+                velocity,
+                this.ctx,
+                position
+            ))
         },
         animateCanvas() {
             // clear rect
@@ -98,6 +133,34 @@ export const app = Vue.createApp({
             // draw aim
             this.aim.move(this.playerPosition, this.aim.getMousePos());
             this.aim.draw();
+
+            // draw aim
+            this.enemies.forEach((enemy, enemyIndex) => {
+                const angle = Math.atan2(
+                    this.playerPosition.y - enemy.getPosition().y,
+                    this.playerPosition.x - enemy.getPosition().x,
+                )
+                const velocity = {
+                    x: Math.cos(angle),
+                    y: Math.sin(angle)
+                }
+                enemy.setVelocity(velocity)
+                enemy.move()
+                enemy.draw()
+
+                this.projectiles.forEach((projectile, projectileIndex) => {
+                    const dist = Math.hypot(
+                        projectile.getPosition().x - enemy.getPosition().x,
+                        projectile.getPosition().y - enemy.getPosition().y,
+                    )
+                    if (dist <= enemy.getRadius()) {
+                        setTimeout(() => {
+                            this.projectiles.splice(projectileIndex, 1);
+                            this.enemies.splice(enemyIndex, 1);
+                        }, 0)
+                    }
+                })
+            })
 
             window.requestAnimationFrame(this.animateCanvas)
         },
@@ -164,7 +227,7 @@ export const app = Vue.createApp({
                 newPosition.x += 5;
             }
 
-            this.player.move(newPosition.x, newPosition.y);
+            this.player.move({x: newPosition.x, y: newPosition.y});
         },
         clearProjectiles() {
             this.projectiles.forEach((projectile, index) => {
@@ -198,19 +261,20 @@ export const app = Vue.createApp({
             this.projectiles.push(new Projectile(
                 velocity,
                 this.ctx,
-                this.playerPosition.x,
-                this.playerPosition.y
+                {
+                    x: this.playerPosition.x,
+                    y: this.playerPosition.y,
+                }
             ))
         },
         changeAim(e) {
             this.aim.move(this.playerPosition, this.mousePos(e));
-        }
+        },
     },
     // language=Vue
     template: `
 
-      <div class="container"
-      >
+      <div class="container">
 
       <canvas
           ref="canvas"

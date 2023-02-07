@@ -1,6 +1,6 @@
-import {DynamicCricle} from "./DynamicCircle.js";
+import {DynamicCircle} from "./DynamicCircle.js";
 
-export class Player extends DynamicCricle {
+export class Player extends DynamicCircle {
 
     radius = 15;
 
@@ -13,8 +13,8 @@ export class Player extends DynamicCricle {
         super.draw()
     }
 
-    move(x, y) {
-        this.positionX = x;
-        this.positionY = y;
+    move(position) {
+        this.position.x = position.x;
+        this.position.y = position.y;
     }
 }

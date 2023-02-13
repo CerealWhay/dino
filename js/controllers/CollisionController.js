@@ -1,0 +1,9 @@
+
+
+class CollisionController {
+
+    constructor() {
+
+    }
+
+}

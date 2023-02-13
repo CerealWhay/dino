@@ -1,3 +1,5 @@
+import {CANVAS} from "../Canvas.js";
+
 export class DynamicCircle {
 
     radius = 15;
@@ -6,20 +8,17 @@ export class DynamicCircle {
         y: 0,
     }
 
-    constructor(
-        ctx,
-        position,
-    ) {
-        this.ctx = ctx;
-        this.position.x = position.x;
-        this.position.y = position.y;
+    constructor() {
+        this.canvas = CANVAS;
+        this.ctx = this.canvas.getCtx();
     }
 
     getPosition() {
-        return {
-            x: this.position.x,
-            y: this.position.y,
-        }
+        return this.position
+    }
+
+    setPosition(position) {
+        this.position = position
     }
 
     getRadius() {

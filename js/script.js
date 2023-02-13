@@ -1,9 +1,5 @@
 /* index script */
-import {app} from "./vue/canvas.js";
+import {app} from "./view/canvas.js";
 
 app.mount('#app')
-
-
-
-
 

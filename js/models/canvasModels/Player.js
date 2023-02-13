@@ -4,17 +4,16 @@ export class Player extends DynamicCircle {
 
     radius = 15;
 
-    constructor(...args) {
-        super(...args);
+    constructor() {
+        super();
+        this.position = {
+            x: this.canvas.getCanvasRect().width / 2,
+            y: this.canvas.getCanvasRect().height / 2,
+        }
     }
 
     draw() {
         this.ctx.fillStyle = 'black'
         super.draw()
-    }
-
-    move(position) {
-        this.position.x = position.x;
-        this.position.y = position.y;
     }
 }

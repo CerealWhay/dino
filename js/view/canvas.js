@@ -3,6 +3,7 @@ import {
     PlayerController,
     AimController,
     ProjectilesController,
+    EnemiesController,
 
     KeyboardController,
 } from "../controllers"
@@ -20,7 +21,11 @@ import {
      сделать полоску хп, чтобы не от одгного вражины дохнуть
      сделать несколько видов оружия
      сделалть врагов-боссов (кторые не умирают от одного выстрела)
-     сделать ходьбу у игрока с инерцией
+     сделать ходьбу у игрока с инерцией (под вопросом)
+     сделать звуки
+     сделать меню
+     система улучшений (лвла, улучшеные шмотки, плюсы к хп, скорости)
+     сделать милишное оружие
 */
 
 export const app = Vue.createApp({
@@ -35,40 +40,28 @@ export const app = Vue.createApp({
 
             playerController: null,
             aimController: null,
-            projectilesController: [],
-
-            enemies: [],
+            projectilesController: null,
+            enemiesController: null,
         }
     },
     mounted() {
-        this.initCanvas();
-        // setInterval(this.createEnemy, 1000)
+        this.init();
+        this.animateCanvas();
     },
     methods: {
-        initCanvas() {
+        init() {
             this.createCanvas();
             this.playerController = new PlayerController();
             this.aimController = new AimController();
             this.projectilesController = new ProjectilesController();
-
-            this.animateCanvas();
+            this.enemiesController = new EnemiesController();
         },
         createCanvas() {
             this.canvasInstance = CANVAS
             this.canvasInstance.setCanvasNode(this.$refs.canvas)
-
             this.ctx = this.canvasInstance.getCtx();
             this.canvasRect = this.canvasInstance.getCanvasRect();
         },
-        // createEnemy() {
-        //     const enemy = new Enemy(
-        //         this.ctx,
-        //         {x:0, y:0}
-        //     )
-        //     enemy.setPosition(this.canvasRect)
-        //     enemy.setVelocity(this.playerPosition)
-        //     this.enemies.push(enemy)
-        // },
         animateCanvas() {
             // clear rect
             this.ctx.fillStyle = 'rgba(227,227,227,0.8)'
@@ -84,24 +77,22 @@ export const app = Vue.createApp({
             this.aimController.frame()
 
             // draw enemies
-            // this.enemies.forEach((enemy, enemyIndex) => {
-            //     enemy.setVelocity(this.playerPosition)
-            //     enemy.move()
-            //     enemy.draw()
-            //
-            //     this.projectiles.forEach((projectile, projectileIndex) => {
-            //         const dist = Math.hypot(
-            //             projectile.getPosition().x - enemy.getPosition().x,
-            //             projectile.getPosition().y - enemy.getPosition().y,
-            //         )
-            //         if (dist <= enemy.getRadius()) {
-            //             setTimeout(() => {
-            //                 this.projectiles.splice(projectileIndex, 1);
-            //                 this.enemies.splice(enemyIndex, 1);
-            //             }, 0)
-            //         }
-            //     })
-            // })
+            this.enemiesController.frame(
+                this.playerController.getPlayer().getPosition()
+            )
+
+            /*this.projectiles.forEach((projectile, projectileIndex) => {
+                    const dist = Math.hypot(
+                        projectile.getPosition().x - enemy.getPosition().x,
+                        projectile.getPosition().y - enemy.getPosition().y,
+                    )
+                    if (dist <= enemy.getRadius()) {
+                        setTimeout(() => {
+                            this.projectiles.splice(projectileIndex, 1);
+                            this.enemies.splice(enemyIndex, 1);
+                        }, 0)
+                    }
+                })*/
 
             window.requestAnimationFrame(this.animateCanvas)
         },

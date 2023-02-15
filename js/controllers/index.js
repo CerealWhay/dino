@@ -1,15 +1,15 @@
 
 import {KeyboardController} from "./KeyboardController.js";
 import {PlayerController} from "./PlayerController.js";
-import {ProjectileController} from "./ProjectileController.js";
 import {AimController} from "./AimController.js";
 import {ProjectilesController} from "./ProjectilesController.js";
+import {EnemiesController} from "./EnemiesController.js";
 
 export {
     PlayerController,
     AimController,
-    ProjectileController,
     ProjectilesController,
+    EnemiesController,
 
     KeyboardController,
 }

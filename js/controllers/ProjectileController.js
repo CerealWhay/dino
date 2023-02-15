@@ -3,6 +3,10 @@ import {Projectile} from "../models";
 export class ProjectileController {
     constructor() {
         this.projectile = new Projectile();
+        this.deltaPosition = {
+            x: 0,
+            y: 0,
+        }
     }
     frame() {
         this.move()

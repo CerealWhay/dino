@@ -1,19 +1,28 @@
-import {CANVAS} from "../models/Canvas.js";
+import {EnemyController} from "./EnemyController.js";
+import {throttle} from "../common/throttle.js";
 
 
 export class EnemiesController {
 
-    enemies = []
-
     constructor() {
-        this.canvas = CANVAS
+        this.enemies = []
+        this.throttledAddEnemy = throttle(this.addEnemy, 1000)
     }
 
-    frame() {
+    frame(playerPosition) {
+        this.throttledAddEnemy(playerPosition)
+
+        this.enemies.forEach(
+            (enemyController) => {
+                enemyController.setDeltaPosition(playerPosition)
+                enemyController.frame()
+            }
+        )
     }
 
-    getEnemies() {
-        return this.enemies
+    addEnemy = (playerPosition) => {
+        const enemyController = new EnemyController()
+        enemyController.setCoordinates(playerPosition)
+        this.enemies.push(enemyController)
     }
-
 }

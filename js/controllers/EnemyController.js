@@ -10,6 +10,10 @@ export class EnemyController {
         }
     }
 
+    getEnemy() {
+        return this.enemy
+    }
+
     frame() {
         this.move()
         this.enemy.draw()

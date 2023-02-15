@@ -13,6 +13,10 @@ export class ProjectilesController {
         this.clearProjectiles()
     }
 
+    getProjectiles() {
+        return this.projectiles
+    }
+
     addProjectile(mousePosition, playerPosition) {
         const projectileController = new ProjectileController()
         projectileController.setCoordinates(mousePosition, playerPosition)
@@ -20,9 +24,13 @@ export class ProjectilesController {
         this.projectiles.push(projectileController)
     }
 
+    removeProjectile(projectileController) {
+        this.projectiles = this.projectiles.filter(item => item !== projectileController)
+    }
+
     clearProjectiles() {
         this.projectiles.forEach((projectileController, index) => {
-            const {x, y} = projectileController.projectile.getPosition()
+            const {x, y} = projectileController.getProjectile().getPosition()
             if (
                 x < 0
                 || x > CANVAS.getCanvasRect().width

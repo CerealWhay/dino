@@ -25,10 +25,7 @@ export class AimController {
     }
 
     setMousePos(mousePos) {
-        this.mousePos = {
-            x: mousePos.x - this.aim.canvas.getCanvasRect().left,
-            y: mousePos.y - this.aim.canvas.getCanvasRect().top
-        }
+        this.mousePos = mousePos;
     }
 
     getTarget() {

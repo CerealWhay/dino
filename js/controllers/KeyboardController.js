@@ -20,6 +20,11 @@ export const KeyboardController =  {
     },
     methods: {
         keyboardEventKeydown (e) {
+            if (e.code === "Escape") {
+                this.$emit('pause', true);
+                return;
+            }
+
             switch(e.code) {
                 case 'KeyW' :
                     this.controls.isPlayerUp = true;

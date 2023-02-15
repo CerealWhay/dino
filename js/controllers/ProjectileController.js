@@ -8,6 +8,11 @@ export class ProjectileController {
             y: 0,
         }
     }
+
+    getProjectile() {
+        return this.projectile
+    }
+
     frame() {
         this.move()
         this.projectile.draw()
@@ -20,10 +25,7 @@ export class ProjectileController {
     setCoordinates(mousePosition, playerPosition) {
         this.projectile.setPosition({x:playerPosition.x, y: playerPosition.y})
 
-        const mousePos = {
-            x: mousePosition.x - this.projectile.canvas.getCanvasRect().left,
-            y: mousePosition.y - this.projectile.canvas.getCanvasRect().top
-        }
+        const mousePos = mousePosition;
 
         const angle = Math.atan2(
             mousePos.y - playerPosition.y,

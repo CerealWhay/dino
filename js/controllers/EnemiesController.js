@@ -4,9 +4,14 @@ import {throttle} from "../common/throttle.js";
 
 export class EnemiesController {
 
+    enemies = [];
+
     constructor() {
-        this.enemies = []
         this.throttledAddEnemy = throttle(this.addEnemy, 1000)
+    }
+
+    getEnemies() {
+        return this.enemies
     }
 
     frame(playerPosition) {
@@ -24,5 +29,9 @@ export class EnemiesController {
         const enemyController = new EnemyController()
         enemyController.setCoordinates(playerPosition)
         this.enemies.push(enemyController)
+    }
+
+    removeEnemy(enemyController) {
+        this.enemies = this.enemies.filter(item => item !== enemyController)
     }
 }

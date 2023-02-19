@@ -8,12 +8,11 @@ import {
     KeyboardController,
     CollisionController,
 } from "../controllers"
-import {PlayButton} from "../models/canvasModels";
 import {getCanvasMousePosition} from "../common/canvasMousePosition.js";
+import {MainMenu} from "./mainMenu.js";
+import {Overlay} from "./overlay.js";
 
 /* @todo:
-     сделать интерфейс меню, с главным окном (кнопка play), счетчиком убийств, паузой
-     сделать score
      сделать усложнение (увеличение потока врагов) с увеличением score
      сделать restart кнопку
 
@@ -30,7 +29,9 @@ import {getCanvasMousePosition} from "../common/canvasMousePosition.js";
 
 export const app = Vue.createApp({
     components: {
-        KeyboardController
+        KeyboardController,
+        MainMenu,
+        Overlay
     },
     data() {
         return {
@@ -44,18 +45,13 @@ export const app = Vue.createApp({
             enemiesController: null,
             collisionController: null,
 
-            isPause: true,
-            pauseBtn: null,
+            isPlay: false,
+            score: 0,
         }
     },
     mounted() {
         this.init();
-
-        this.pauseBtn = new PlayButton()
-
         this.animateCanvas();
-
-
     },
     methods: {
         init() {
@@ -73,7 +69,7 @@ export const app = Vue.createApp({
             this.canvasRect = this.canvasInstance.getCanvasRect();
         },
         animateCanvas() {
-            if (!this.isPause) {
+            if (this.isPlay) {
                 // clear rect
                 this.ctx.fillStyle = 'rgba(227,227,227,0.8)'
                 this.ctx.fillRect(0, 0, this.canvasRect.width, this.canvasRect.height)
@@ -92,33 +88,24 @@ export const app = Vue.createApp({
                     this.playerController.getPlayer().getPosition()
                 )
 
-                this.collisionController.frame({
+                const collision = this.collisionController.frame({
                     playerController: this.playerController,
                     projectilesController: this.projectilesController,
                     enemiesController: this.enemiesController,
                 });
-            } else {
-                this.ctx.fillStyle = 'rgba(204,204,204,0.8)'
-                this.ctx.fillRect(0, 0, this.canvasRect.width, this.canvasRect.height)
-
-                this.pauseBtn.draw();
+                if (collision.isDeath) {
+                    console.log('loser!!!');
+                }
+                if (collision.kills) {
+                    this.score += collision.kills * 10;
+                }
             }
+
             window.requestAnimationFrame(this.animateCanvas)
         },
 
-        clickEvent(e) {
+        shoot(e) {
             const canvasMousePos = getCanvasMousePosition(this.canvasRect, {x: e.clientX, y: e.clientY})
-
-            if (
-                this.isPause
-                && canvasMousePos.x > this.pauseBtn.getRectangle().x
-                && canvasMousePos.x < this.pauseBtn.getRectangle().x + this.pauseBtn.getRectangle().width
-                && canvasMousePos.y > this.pauseBtn.getRectangle().y
-                && canvasMousePos.y < this.pauseBtn.getRectangle().y + this.pauseBtn.getRectangle().height
-            ) {
-                this.isPause = false
-                return;
-            }
             this.projectilesController.addProjectile(
                 canvasMousePos,
                 this.playerController.getPlayer().getPosition()
@@ -139,15 +126,26 @@ export const app = Vue.createApp({
 
       <div class="container">
 
+      <MainMenu
+          v-show="!isPlay"
+          @start="isPlay = true"
+          @resume="isPlay = true"
+      ></MainMenu>
+      
+      <Overlay 
+          v-show="isPlay"
+          :score="score"
+      ></Overlay>
+
       <canvas
           ref="canvas"
-          @mousedown="clickEvent($event)"
+          @mousedown="shoot($event)"
           @mousemove="changeAim"
       ></canvas>
 
       <KeyboardController 
-          v-on:changeControls="changeControls"
-          v-on:pause="isPause = $event"
+          @changeControls="changeControls"
+          @pause="isPlay = !isPlay"
       ></KeyboardController>
       </div>
 

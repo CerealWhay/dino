@@ -1,0 +1,17 @@
+
+.overlay {
+  background: rgba(227,227,227,0.0);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  pointer-events: none;
+
+  .score-ui {
+    margin-top: 5px;
+    margin-left: 15px;
+    .score-num {
+      color: red;
+    }
+  }
+}

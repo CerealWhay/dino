@@ -7,13 +7,18 @@ export class CollisionController {
             enemiesController,
         } = controllers
 
-        this.playerDeath(playerController, enemiesController);
-        this.killEnemy(projectilesController, enemiesController);
+        const isDeath = this.playerDeath(playerController, enemiesController);
+        const kills = this.killEnemy(projectilesController, enemiesController);
 
+        return  {
+            kills: kills,
+            isDeath: isDeath
+        };
     }
 
     playerDeath(playerController, enemiesController) {
         const enemies = enemiesController.getEnemies();
+        let isDeath = false;
 
         enemies.forEach((enemyController) => {
             const dist = Math.hypot(
@@ -21,14 +26,17 @@ export class CollisionController {
                 playerController.getPlayer().getPosition().y - enemyController.getEnemy().getPosition().y,
             )
             if (dist <= (enemyController.getEnemy().getRadius() + playerController.getPlayer().getRadius())) {
-                console.log('you lose!')
+                isDeath = true
             }
         })
+        return isDeath;
     }
 
     killEnemy(projectilesController, enemiesController) {
         const projectiles = projectilesController.getProjectiles();
         const enemies = enemiesController.getEnemies();
+
+        let kills = 0;
 
         enemies.forEach((enemyController) => {
             projectiles.forEach((projectileController) => {
@@ -41,9 +49,11 @@ export class CollisionController {
                         projectilesController.removeProjectile(projectileController)
                         enemiesController.removeEnemy(enemyController)
                     }, 0)
+                    kills++;
                 }
             })
         })
+        return kills;
     }
 
 }

@@ -1,19 +1,73 @@
 * {
   padding: 0;
   margin: 0;
+  user-select: none;
+  font-family: cursive;
 }
 
 .container {
   max-width: 1200px;
   margin: 25px auto 0;
+  position: relative;
 }
 
 canvas {
   border-radius: 15px;
+  cursor: none;
 }
 
 input[type=range] {
   width: 500px;
+}
+
+.main-menu {
+  background: rgba(227, 227, 227, 0);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+.main-menu .menu-wrapper {
+  max-width: 500px;
+  margin: 150px auto 0;
+  padding: 35px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+}
+.main-menu .menu-wrapper .btn {
+  border-radius: 5px;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 42px;
+  cursor: pointer;
+  background: rgb(250, 250, 250);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+}
+.main-menu .menu-wrapper .btn:hover {
+  background: rgb(240, 240, 240);
+}
+
+.overlay {
+  background: rgba(227, 227, 227, 0);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  pointer-events: none;
+}
+.overlay .score-ui {
+  margin-top: 5px;
+  margin-left: 15px;
+}
+.overlay .score-ui .score-num {
+  color: red;
 }
 
 /*# sourceMappingURL=style.css.map */

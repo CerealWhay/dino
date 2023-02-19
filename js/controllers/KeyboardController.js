@@ -21,7 +21,7 @@ export const KeyboardController =  {
     methods: {
         keyboardEventKeydown (e) {
             if (e.code === "Escape") {
-                this.$emit('pause', true);
+                this.$emit('pause');
                 return;
             }
 

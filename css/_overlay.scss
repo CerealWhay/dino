@@ -14,4 +14,13 @@
       color: red;
     }
   }
+
+  .warning-info {
+    text-align: start;
+    position: fixed;
+    top: 5px;
+    right: 15px;
+    display: flex;
+    flex-direction: column;
+  }
 }

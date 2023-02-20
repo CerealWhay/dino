@@ -14,7 +14,6 @@ import {Overlay} from "./overlay.js";
 
 /* @todo:
      сделать усложнение (увеличение потока врагов) с увеличением score
-     сделать restart кнопку
 
      сделать модельки покрасивше
      сделать стрельбу зажимом
@@ -35,6 +34,8 @@ export const app = Vue.createApp({
     },
     data() {
         return {
+            animation: null,
+
             canvasInstance: null,
             ctx: null,
             canvasRect: null,
@@ -45,22 +46,31 @@ export const app = Vue.createApp({
             enemiesController: null,
             collisionController: null,
 
-            isPlay: false,
-            score: 0,
+            pause: false,
+            isNewGame: true,
+            score: null,
         }
     },
-    mounted() {
-        this.init();
-        this.animateCanvas();
+    watch: {
+        isNewGame(b) {
+            if (b) {
+                window.cancelAnimationFrame(this.animation)
+            }
+        }
     },
     methods: {
         init() {
+            this.score = 0;
+            this.isNewGame = false;
+
             this.createCanvas();
             this.playerController = new PlayerController();
             this.aimController = new AimController();
             this.projectilesController = new ProjectilesController();
             this.enemiesController = new EnemiesController();
             this.collisionController = new CollisionController();
+
+            this.animation = window.requestAnimationFrame(this.animateCanvas)
         },
         createCanvas() {
             this.canvasInstance = CANVAS
@@ -69,7 +79,7 @@ export const app = Vue.createApp({
             this.canvasRect = this.canvasInstance.getCanvasRect();
         },
         animateCanvas() {
-            if (this.isPlay) {
+            if (!this.pause) {
                 // clear rect
                 this.ctx.fillStyle = 'rgba(227,227,227,0.8)'
                 this.ctx.fillRect(0, 0, this.canvasRect.width, this.canvasRect.height)
@@ -95,13 +105,13 @@ export const app = Vue.createApp({
                 });
                 if (collision.isDeath) {
                     console.log('loser!!!');
+                    this.isNewGame = true;
                 }
                 if (collision.kills) {
                     this.score += collision.kills * 10;
                 }
             }
-
-            window.requestAnimationFrame(this.animateCanvas)
+            this.animation = window.requestAnimationFrame(this.animateCanvas)
         },
 
         shoot(e) {
@@ -127,13 +137,15 @@ export const app = Vue.createApp({
       <div class="container">
 
       <MainMenu
-          v-show="!isPlay"
-          @start="isPlay = true"
-          @resume="isPlay = true"
+          v-show="pause || isNewGame"
+          :is-new-game="isNewGame"
+          :score="score"
+          @start="init"
+          @resume="pause = false"
       ></MainMenu>
       
       <Overlay 
-          v-show="isPlay"
+          v-show="!pause && !isNewGame"
           :score="score"
       ></Overlay>
 
@@ -144,8 +156,9 @@ export const app = Vue.createApp({
       ></canvas>
 
       <KeyboardController 
+          v-if="ctx"
           @changeControls="changeControls"
-          @pause="isPlay = !isPlay"
+          @pause="pause = !pause"
       ></KeyboardController>
       </div>
 

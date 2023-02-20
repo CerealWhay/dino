@@ -7,16 +7,16 @@
 
 
 .container {
-  max-width: 1200px;
-  margin: 25px auto 0;
+  //max-width: 1200px;
+  //margin: 25px auto 0;
 
   position: relative;
 }
 
 canvas {
-  //border: 1px dotted #000;
+  display: block;
   border-radius: 15px;
-  cursor: none;
+  cursor: crosshair;
 }
 
 input[type=range] {

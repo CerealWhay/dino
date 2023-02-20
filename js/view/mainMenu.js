@@ -1,12 +1,16 @@
 export const MainMenu =  {
-    data() {
-        return {
-            isNewGame: true,
-        }
+    props: {
+        isNewGame: {
+            type: Boolean,
+            required: false,
+        },
+        score: {
+            type: Number,
+            required: false,
+        },
     },
     methods: {
         startNewGame() {
-            this.isNewGame = false;
             this.$emit('start');
         }
 
@@ -16,6 +20,14 @@ export const MainMenu =  {
 
       <div class="main-menu">
       <div class="menu-wrapper">
+
+        <div class="score">
+          Your score:
+          <span class="score-num">
+            {{ score }}
+          </span>
+        </div>
+        
         <div 
             v-if="isNewGame"
             class="btn btn--start"
@@ -31,6 +43,7 @@ export const MainMenu =  {
         >
           Resume game
         </div>
+        
       </div>
       </div>
 

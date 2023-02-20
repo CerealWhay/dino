@@ -22,4 +22,4 @@ class Canvas {
     }
 }
 
-export const CANVAS = new Canvas(1200, 600)
+export const CANVAS = new Canvas(innerWidth, innerHeight)

@@ -1,4 +1,4 @@
-import {Projectile} from "../models";
+import {Projectile} from "../models/index.js";
 
 export class ProjectileController {
     constructor() {

@@ -7,7 +7,7 @@ import {
 
     KeyboardController,
     CollisionController,
-} from "../controllers"
+} from "../controllers/index.js"
 import {getCanvasMousePosition} from "../common/canvasMousePosition.js";
 import {MainMenu} from "./mainMenu.js";
 import {Overlay} from "./overlay.js";

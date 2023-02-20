@@ -1,4 +1,4 @@
-import {Enemy} from "../models";
+import {Enemy} from "../models/index.js";
 
 export class EnemyController {
 

@@ -1,4 +1,4 @@
-import {AimLine} from "../models";
+import {AimLine} from "../models/index.js";
 
 export class AimController {
 

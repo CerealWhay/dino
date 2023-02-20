@@ -4,7 +4,7 @@ import {
     Projectile,
     AimLine,
     Player,
-} from "./canvasModels";
+} from "./canvasModels/index.js";
 
 export {
     Enemy,

@@ -1,5 +1,5 @@
 /* index script */
-import {app} from "./view/canvas.js";
+import {app} from "./view/app.js";
 
 app.mount('#app')
 

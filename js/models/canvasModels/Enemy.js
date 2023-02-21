@@ -4,8 +4,8 @@ export class Enemy extends DynamicCircle {
 
     radius = 20;
 
-    constructor(...args) {
-        super(...args);
+    constructor() {
+        super();
     }
 
     draw() {

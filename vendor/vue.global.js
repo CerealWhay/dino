@@ -190,7 +190,7 @@ var Vue = (function (exports) {
       'foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask,' +
       'mesh,meshgradient,meshpatch,meshrow,metadata,mpath,path,pattern,' +
       'polygon,polyline,radialGradient,rect,set,solidcolor,stop,switch,symbol,' +
-      'text,textPath,title,tspan,unknown,use,view';
+      'text,textPath,title,tspan,unknown,use,views';
   const VOID_TAGS = 'area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr';
   /**
    * Compiler only.
@@ -300,7 +300,7 @@ var Vue = (function (exports) {
                   : String(val);
   };
   const replacer = (_key, val) => {
-      // can't use isRef here since @view/shared has no deps
+      // can't use isRef here since @views/shared has no deps
       if (val && val.__v_isRef) {
           return replacer(_key, val.value);
       }
@@ -2012,7 +2012,7 @@ var Vue = (function (exports) {
   const hmrDirtyComponents = new Set();
   // Expose the HMR runtime on the global object
   // This makes it entirely tree-shakable without polluting the exports and makes
-  // it easier to be used in toolings like view-loader
+  // it easier to be used in toolings like views-loader
   // Note: for a component to be eligible for HMR it also needs the __hmrId option
   // to be set so that its instances can be registered / removed.
   {
@@ -4692,7 +4692,7 @@ var Vue = (function (exports) {
               return publicGetter(instance);
           }
           else if (
-          // css module (injected by view-loader)
+          // css module (injected by views-loader)
           (cssModule = type.__cssModules) &&
               (cssModule = cssModule[key])) {
               return cssModule;
@@ -7903,7 +7903,7 @@ var Vue = (function (exports) {
               dynamicChildren = null;
           }
           if (n1 == null) {
-              // insert anchors in the main view
+              // insert anchors in the main views
               const placeholder = (n2.el = createComment('teleport start')
                   );
               const mainAnchor = (n2.anchor = createComment('teleport end')
@@ -8008,7 +8008,7 @@ var Vue = (function (exports) {
       }
       const { el, anchor, shapeFlag, children, props } = vnode;
       const isReorder = moveType === 2 /* TeleportMoveTypes.REORDER */;
-      // move main view anchor if this is a re-order.
+      // move main views anchor if this is a re-order.
       if (isReorder) {
           insert(el, container, parentAnchor);
       }
@@ -8023,7 +8023,7 @@ var Vue = (function (exports) {
               }
           }
       }
-      // move main view anchor if this is a re-order.
+      // move main views anchor if this is a re-order.
       if (isReorder) {
           insert(anchor, container, parentAnchor);
       }
@@ -9082,7 +9082,7 @@ var Vue = (function (exports) {
    * `<script setup>` helper for persisting the current instance context over
    * async/await flows.
    *
-   * `@view/compiler-sfc` converts the following:
+   * `@views/compiler-sfc` converts the following:
    *
    * ```ts
    * const x = await foo()
@@ -9367,7 +9367,7 @@ var Vue = (function (exports) {
   // Core API ------------------------------------------------------------------
   const version = "3.2.45";
   /**
-   * SSR utils for \@view/server-renderer. Only exposed in ssr-possible builds.
+   * SSR utils for \@views/server-renderer. Only exposed in ssr-possible builds.
    * @internal
    */
   const ssrUtils = (null);
@@ -9660,7 +9660,7 @@ var Vue = (function (exports) {
       el.removeEventListener(event, handler, options);
   }
   function patchEvent(el, rawName, prevValue, nextValue, instance = null) {
-      // vei = view event invokers
+      // vei = views event invokers
       const invokers = el._vei || (el._vei = {});
       const existingInvoker = invokers[rawName];
       if (nextValue && existingInvoker) {
@@ -9702,14 +9702,14 @@ var Vue = (function (exports) {
   const getNow = () => cachedNow || (p.then(() => (cachedNow = 0)), (cachedNow = Date.now()));
   function createInvoker(initialValue, instance) {
       const invoker = (e) => {
-          // async edge case vuejs/view#6566
+          // async edge case vuejs/views#6566
           // inner click event triggers patch, event handler
           // attached to outer element during patch, and triggered again. This
           // happens because browsers fire microtask ticks between event propagation.
           // this no longer happens for templates in Vue 3, but could still be
           // theoretically possible for hand-written render functions.
           // the solution: we save the timestamp when a handler is attached,
-          // and also attach the timestamp to any event that was handled by view
+          // and also attach the timestamp to any event that was handled by views
           // for the first time (to avoid inconsistent event timestamp implementations
           // or events fired from iframes, e.g. #2513)
           // The handler would only fire if the event passed to it was fired
@@ -11132,7 +11132,7 @@ var Vue = (function (exports) {
   const IS_REF = Symbol(`isRef` );
   const WITH_MEMO = Symbol(`withMemo` );
   const IS_MEMO_SAME = Symbol(`isMemoSame` );
-  // Name mapping for runtime helpers that need to be imported from 'view' in
+  // Name mapping for runtime helpers that need to be imported from 'views' in
   // generated code. Make sure these are correctly exported in the runtime!
   const helperNameMap = {
       [FRAGMENT]: `Fragment`,
@@ -12148,7 +12148,7 @@ var Vue = (function (exports) {
           const p = props[i];
           if (p.type === 6 /* NodeTypes.ATTRIBUTE */) {
               if (p.name === 'is' && p.value) {
-                  if (p.value.content.startsWith('view:')) {
+                  if (p.value.content.startsWith('views:')) {
                       return true;
                   }
               }
@@ -13066,7 +13066,7 @@ var Vue = (function (exports) {
 
   const PURE_ANNOTATION = `/*#__PURE__*/`;
   const aliasHelper = (s) => `${helperNameMap[s]}: _${helperNameMap[s]}`;
-  function createCodegenContext(ast, { mode = 'function', prefixIdentifiers = mode === 'module', sourceMap = false, filename = `template.vue.html`, scopeId = null, optimizeImports = false, runtimeGlobalName = `Vue`, runtimeModuleName = `vue`, ssrRuntimeModuleName = 'view/server-renderer', ssr = false, isTS = false, inSSR = false }) {
+  function createCodegenContext(ast, { mode = 'function', prefixIdentifiers = mode === 'module', sourceMap = false, filename = `template.vue.html`, scopeId = null, optimizeImports = false, runtimeGlobalName = `Vue`, runtimeModuleName = `vue`, ssrRuntimeModuleName = 'views/server-renderer', ssr = false, isTS = false, inSSR = false }) {
       const context = {
           mode,
           prefixIdentifiers,
@@ -14518,9 +14518,9 @@ var Vue = (function (exports) {
               }
           }
           else if (isProp.type === 6 /* NodeTypes.ATTRIBUTE */ &&
-              isProp.value.content.startsWith('view:')) {
-              // <button is="view:xxx">
-              // if not <component>, only is value that starts with "view:" will be
+              isProp.value.content.startsWith('views:')) {
+              // <button is="views:xxx">
+              // if not <component>, only is value that starts with "views:" will be
               // treated as component by the parse phase and reach here, unless it's
               // compat mode where all is values are considered components
               tag = isProp.value.content.slice(4);
@@ -14631,10 +14631,10 @@ var Vue = (function (exports) {
                       properties.push(createObjectProperty(createSimpleExpression('ref_for', true), createSimpleExpression('true')));
                   }
               }
-              // skip is on <component>, or is="view:xxx"
+              // skip is on <component>, or is="views:xxx"
               if (name === 'is' &&
                   (isComponentTag(tag) ||
-                      (value && value.content.startsWith('view:')) ||
+                      (value && value.content.startsWith('views:')) ||
                       (false ))) {
                   continue;
               }
@@ -14673,7 +14673,7 @@ var Vue = (function (exports) {
               (isVBind && isStaticArgOf(arg, 'key')) ||
                   // inline before-update hooks need to force block so that it is invoked
                   // before children
-                  (isVOn && hasChildren && isStaticArgOf(arg, 'view:before-update'))) {
+                  (isVOn && hasChildren && isStaticArgOf(arg, 'views:before-update'))) {
                   shouldUseBlock = true;
               }
               if (isVBind && isStaticArgOf(arg, 'ref') && context.scopes.vFor > 0) {
@@ -15010,7 +15010,7 @@ var Vue = (function (exports) {
           if (arg.isStatic) {
               let rawName = arg.content;
               // TODO deprecate @vnodeXXX usage
-              if (rawName.startsWith('view:')) {
+              if (rawName.startsWith('views:')) {
                   rawName = `vnode-${rawName.slice(4)}`;
               }
               const eventString = node.tagType !== 0 /* ElementTypes.ELEMENT */ ||
@@ -15362,7 +15362,7 @@ var Vue = (function (exports) {
       ];
   }
   // we name it `baseCompile` so that higher order compilers like
-  // @view/compiler-dom can export `compile` while re-exporting everything else.
+  // @views/compiler-dom can export `compile` while re-exporting everything else.
   function baseCompile(template, options = {}) {
       const onError = options.onError || defaultOnError;
       const isModuleMode = options.mode === 'module';

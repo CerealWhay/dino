@@ -1,5 +1,5 @@
 /* index script */
-import {app} from "./view/app.js";
+import {app} from "./views/app.js";
 
 app.mount('#app')
 
